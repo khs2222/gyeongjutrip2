@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>경주 수학여행 길잡이</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF2F0; --surface:#FFFFFF; --surface-2:#F3F7F5; --ink:#17262B; --ink-2:#4A5F66; --line:#D3DEDB;
+  --tile:#2F6B63; --on-tile:#FFFFFF; --tile-soft:#DCEBE7;
+  --gold:#B8862A; --gold-ink:#7A5610; --gold-soft:#F5E9C8;
+  --red:#B93A2B; --red-soft:#F9E4E0; --on-red:#FFFFFF;
+  --hero:#14282D; --hero-ink:#F2F6F4; --hero-dim:#A9BFBB;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1719; --surface:#16262A; --surface-2:#1B2F34; --ink:#E7EFEC; --ink-2:#9DB2B1; --line:#2A3F44;
+    --tile:#6DBBAC; --on-tile:#0E1719; --tile-soft:#1F3A3A;
+    --gold:#E0B04E; --gold-ink:#E9C877; --gold-soft:#3A3117;
+    --red:#F08A7A; --red-soft:#3A1E1B; --on-red:#1F0D0A;
+    --hero:#0B1417; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1719; --surface:#16262A; --surface-2:#1B2F34; --ink:#E7EFEC; --ink-2:#9DB2B1; --line:#2A3F44;
+  --tile:#6DBBAC; --on-tile:#0E1719; --tile-soft:#1F3A3A;
+  --gold:#E0B04E; --gold-ink:#E9C877; --gold-soft:#3A3117;
+  --red:#F08A7A; --red-soft:#3A1E1B; --on-red:#1F0D0A;
+  --hero:#0B1417; color-scheme: dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;font-size:var(--fs,100%)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.65 'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3{font-family:'Gowun Batang','Nanum Myeongjo','Batang',serif;line-height:1.35;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--tile)}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+/* hero */
+.hero{background:var(--hero);color:var(--hero-ink);overflow:hidden}
+.hero .wrap{padding-top:18px}
+.hero-sub{margin:0 0 4px;font-size:0.8125rem;color:var(--hero-dim)}
+.hero h1{font-size:1.75rem;font-weight:700;letter-spacing:-.01em}
+.hero-status{margin:10px 0 0;display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.09);padding:6px 12px;border-radius:999px;font-size:0.875rem;max-width:100%}
+.hero-status i{width:8px;height:8px;border-radius:50%;background:#E3B44A;flex:none}
+.sky{display:block;width:100%;height:96px;margin-top:6px}
+.hero.compact .sky,.hero.compact .hero-sub,.hero.compact .hero-status{display:none}
+.hero.compact .wrap{padding-top:12px;padding-bottom:12px}
+.hero.compact h1{font-size:1.25rem}
+
+main{max-width:640px;margin:0 auto;padding:18px 16px calc(84px + 24px)}
+.tab{display:none}.tab.on{display:block}
+.tab>h2{font-size:1.375rem;margin:4px 0 4px}
+.lead{color:var(--ink-2);margin:0 0 14px;font-size:0.9062rem}
+
+/* tabbar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar ul{list-style:none;margin:0 auto;padding:0;display:flex;max-width:640px}
+.tabbar li{flex:1}
+.tabbar button{width:100%;background:none;border:0;padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:0.7188rem;color:var(--ink-2);cursor:pointer;min-height:56px}
+.tabbar svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-current="page"]{color:var(--tile);font-weight:600}
+.tabbar button.danger[aria-current="page"]{color:var(--red)}
+
+/* controls */
+.seg{display:flex;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin:0 0 10px}
+.seg button{flex:1;border:0;background:none;padding:9px 6px;border-radius:9px;cursor:pointer;color:var(--ink-2);font-size:0.9062rem}
+.seg button[aria-pressed="true"]{background:var(--tile);color:var(--on-tile);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;border-radius:10px;cursor:pointer;font-size:0.9062rem;min-height:42px}
+.btn.primary{background:var(--tile);border-color:var(--tile);color:var(--on-tile);font-weight:600}
+.btn.small{padding:5px 10px;min-height:34px;font-size:0.8438rem}
+.btn.danger{background:var(--red);border-color:var(--red);color:var(--on-red);font-weight:600}
+.btn[disabled]{opacity:.55;cursor:default}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 14px}
+.note{font-size:0.8438rem;color:var(--ink-2);margin:12px 2px}
+
+/* timeline */
+.tl{list-style:none;margin:8px 0 0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:69px;top:10px;bottom:10px;width:2px;background:var(--line)}
+.tl-item{display:grid;grid-template-columns:56px 1fr;column-gap:26px;padding:6px 0;position:relative}
+.tl-item::before{content:"";position:absolute;left:63px;top:15px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:2px solid var(--tile)}
+.tl-item.k-m::before,.tl-item.k-r::before{width:10px;height:10px;left:65px;top:17px;border-color:var(--line);background:var(--bg)}
+.tl-item.now::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 5px var(--gold-soft);width:14px;height:14px;left:63px;top:15px}
+.tl-time{font-variant-numeric:tabular-nums;text-align:right;font-weight:600;font-size:0.9062rem;line-height:1.35;padding-top:9px}
+.tl-time small{display:block;color:var(--ink-2);font-weight:400;font-size:0.75rem}
+.tl-body{padding:8px 12px;border-radius:12px;border:1px solid transparent}
+.k-a .tl-body,.k-f .tl-body{background:var(--surface);border-color:var(--line)}
+.k-m .tl-body,.k-r .tl-body{color:var(--ink-2)}
+.tl-item.now .tl-body{border-color:var(--gold);background:var(--surface)}
+.tl-title{font-weight:600;font-size:1.0rem;color:var(--ink)}
+.k-m .tl-title,.k-r .tl-title{font-weight:500;font-size:0.9375rem;color:var(--ink-2)}
+.tl-meta{font-size:0.8438rem;color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--tile);background:var(--tile-soft);color:var(--tile);border-radius:999px;padding:3px 11px;font-size:0.8125rem;cursor:pointer}
+.chip.plain{border-color:var(--line);background:var(--surface-2);color:var(--ink-2);cursor:default}
+.now-tag{display:inline-block;background:var(--gold);color:#2b1d00;border-radius:6px;padding:0 7px;font-size:0.75rem;font-weight:600;margin-left:6px;vertical-align:1px}
+
+/* places */
+details.place{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;overflow:hidden}
+details.place summary{list-style:none;cursor:pointer;padding:13px 14px;display:flex;gap:10px;align-items:center}
+details.place summary::-webkit-details-marker{display:none}
+details.place summary .pn{font-family:'Gowun Batang',serif;font-weight:700;font-size:1.125rem}
+details.place summary .ps{font-size:0.8438rem;color:var(--ink-2);display:block}
+details.place summary .pt{margin-left:auto;font-size:0.75rem;color:var(--gold-ink);background:var(--gold-soft);padding:2px 9px;border-radius:999px;white-space:nowrap;flex:none}
+details.place[open] summary{border-bottom:1px solid var(--line);background:var(--surface-2)}
+.pbody{padding:6px 14px 14px}
+.pbody h3{font-size:0.9375rem;margin:14px 0 4px;color:var(--tile)}
+.pbody ul{margin:0;padding-left:18px}
+.pbody li{margin:3px 0}
+.q{background:var(--gold-soft);border-radius:10px;padding:10px 12px;margin-top:14px}
+.q b{display:block;font-size:0.8125rem;color:var(--gold-ink);margin-bottom:2px}
+.src{font-size:0.7812rem;color:var(--ink-2);margin-top:12px}
+.src a{margin-right:8px}
+.when{font-size:0.8125rem;color:var(--ink-2);margin:6px 0 0}
+.pbody .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* journal */
+label.f{display:block;font-size:0.8438rem;font-weight:600;margin:10px 0 4px}
+select,textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+textarea{min-height:110px;resize:vertical}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{position:absolute;top:2px;right:2px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;line-height:1}
+.entries{margin-top:18px;display:grid;gap:12px}
+.entry{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.entry-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:8px}
+.entry-head time{font-size:0.7812rem;color:var(--ink-2)}
+.entry-text{margin:8px 0 0;white-space:pre-wrap}
+.photos{display:grid;gap:6px;grid-template-columns:repeat(2,1fr)}
+.photos.p1{grid-template-columns:1fr}
+.photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;background:var(--surface-2)}
+.photos.p1 img{aspect-ratio:auto;max-height:340px}
+.entry-actions{display:flex;gap:8px;margin-top:10px}
+.empty{border:1.5px dashed var(--line);border-radius:14px;padding:22px 16px;text-align:center;color:var(--ink-2)}
+
+/* safety */
+.sos{background:var(--red);color:var(--on-red);border-radius:16px;padding:16px}
+.sos h2{font-size:1.25rem}
+.sos p{margin:4px 0 12px}
+.sos a{display:flex;align-items:center;justify-content:center;background:var(--on-red);color:var(--red);font-weight:700;font-size:1.375rem;text-decoration:none;border-radius:12px;padding:10px;min-height:52px}
+.steps{margin:12px 0 0;padding-left:20px}
+.steps li{margin:4px 0}
+.tellist{list-style:none;margin:0;padding:0}
+.tellist li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.tellist li:first-child{border-top:0}
+.tellist .nm{font-weight:600}
+.tellist .rl{font-size:0.8125rem;color:var(--ink-2);display:block}
+.tellist a{white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+.grp{font-size:0.875rem;color:var(--tile);font-weight:600;margin:14px 0 2px}
+.lock{display:flex;gap:8px;margin-top:8px}
+.lock input{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;letter-spacing:.2em;font-size:1.125rem}
+.err{color:var(--red);font-size:0.8438rem;margin:6px 0 0;min-height:1.2em}
+details.rules{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:8px 0}
+details.rules summary{cursor:pointer;padding:11px 14px;font-weight:600}
+details.rules ul{margin:0;padding:0 14px 12px 32px}
+.sec{margin-top:18px}
+.sec>h3{font-size:1.0625rem;margin-bottom:6px}
+
+/* ai */
+
+
+button{touch-action:manipulation}
+body{min-height:100vh;min-height:100dvh}
+.two{display:block}
+.col{min-width:0}
+.gear{position:absolute;right:16px;top:12px;background:rgba(255,255,255,.12);color:var(--hero-ink);border:0;border-radius:999px;padding:6px 13px;font-size:.8125rem;cursor:pointer;min-height:34px}
+.gear:hover{background:rgba(255,255,255,.2)}
+.hero .wrap{position:relative}
+.settings{margin:14px auto 0;max-width:640px}
+.settings h3{font-size:1rem;margin:0 0 8px}
+.settings .grp2{margin:0 0 12px}
+.settings .grp2 b{display:block;font-size:.8125rem;margin-bottom:4px;color:var(--ink-2);font-weight:600}
+.settings .seg{margin:0}
+.settings[hidden]{display:none}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media (hover:hover){.btn:hover,.chip:hover{filter:brightness(.97)}}
+
+/* 넓은 화면(웨일북·태블릿 가로·PC) */
+html.wide body{padding-left:92px}
+html.wide .tabbar{top:0;right:auto;bottom:0;width:92px;border-top:0;border-right:1px solid var(--line);padding:0 0 0 env(safe-area-inset-left,0px);display:flex;flex-direction:column;justify-content:center}
+html.wide .tabbar ul{flex-direction:column;max-width:none;margin:0;gap:6px;padding:8px 6px}
+html.wide .tabbar button{min-height:74px;border-radius:12px;font-size:.8125rem}
+html.wide .tabbar button[aria-current="page"]{background:var(--tile-soft)}
+html.wide .tabbar svg{width:26px;height:26px}
+html.wide .wrap,html.wide main,html.wide .settings{max-width:1120px}
+html.wide .wrap{padding:0 28px}
+html.wide main{padding:24px 28px 48px}
+html.wide .hero .wrap{padding-top:22px}
+html.wide .hero h1{font-size:1.9rem}
+html.wide .sky{height:128px}
+html.wide .gear{right:28px}
+html.wide .sched.two{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:32px;align-items:start}
+html.wide .jr.two{display:grid;grid-template-columns:minmax(340px,420px) 1fr;gap:28px;align-items:start}
+html.wide .sf.two{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+html.wide .side,html.wide .jleft{position:sticky;top:16px}
+html.wide #placeList{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+html.wide details.place{margin:0}
+html.wide .photos{grid-template-columns:repeat(3,1fr)}
+html.wide .photos.p1{grid-template-columns:1fr}
+html.wide .photos.p2{grid-template-columns:repeat(2,1fr)}
+html.wide .entries{margin-top:0}
+html.wide .tl::before{left:77px}
+html.wide .tl-item{grid-template-columns:64px 1fr}
+html.wide .tl-item::before{left:71px}
+html.wide .tl-item.k-m::before,html.wide .tl-item.k-r::before{left:73px}
+html.wide .tl-item.now::before{left:71px}
+/* 낮은 가로 화면(가로로 든 휴대폰) */
+@media (max-height:480px){
+  .sky{display:none}
+  .hero .wrap{padding-top:10px;padding-bottom:10px}
+  .hero-sub{display:none}
+  .tabbar button{min-height:44px;flex-direction:row;justify-content:center;gap:6px}
+  main{padding-bottom:70px}
+}
+/* 인쇄 / PDF 저장 */
+@media print{
+  .tabbar,.hero,.settings,.jleft,#exportBox,.entry-actions,  .tab{display:none!important}
+  #tab-journal{display:block!important}
+  html.wide body,body{padding:0!important;background:#fff;color:#000}
+  html.wide .jr.two{display:block}
+  .entry{break-inside:avoid;border:1px solid #bbb;background:#fff}
+  main{padding:0!important;max-width:none!important}
+}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;width:min(92vw,520px);background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.toast[hidden]{display:none}
+.toast p{margin:0 0 10px;font-weight:600}
+.vbox{display:grid;gap:10px;margin-top:8px}
+.vwrap video{width:100%;max-height:360px;border-radius:10px;background:#000;display:block}
+.vcap{font-size:.8125rem;color:var(--ink-2);margin-top:4px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.vnote{font-size:.8125rem;color:var(--ink-2);margin:6px 0 0}
+.thumb video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.thumb .vb{position:absolute;left:3px;bottom:3px;background:rgba(0,0,0,.7);color:#fff;font-size:.6875rem;padding:0 6px;border-radius:6px}
+.thumb.novid{display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--ink-2);background:var(--surface-2);text-align:center;padding:4px}
+@media print{.entry video,.vbox{display:none!important}}
+
+.cam{position:fixed;inset:0;z-index:70;background:#000;color:#fff;display:flex;flex-direction:column}
+.cam[hidden]{display:none}
+.cam video{flex:1;min-height:0;width:100%;object-fit:contain;background:#000}
+.cam-msg{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 12px);margin:0;text-align:center;font-size:.9375rem;background:rgba(0,0,0,.6);padding:8px 12px;border-radius:10px}
+.cam-msg:empty{display:none}
+.cam-bar{display:flex;align-items:center;justify-content:space-around;gap:10px;padding:14px 12px calc(env(safe-area-inset-bottom,0px) + 16px);background:#000}
+.cam-bar .btn{background:rgba(255,255,255,.14);border-color:transparent;color:#fff;min-width:84px}
+.cam-shot{width:72px;height:72px;border-radius:50%;border:5px solid #fff;background:#fff;cursor:pointer;padding:0;box-shadow:inset 0 0 0 4px #000}
+.cam-shot.video{background:#E5483A}
+.cam-shot.on{border-radius:18px;background:#E5483A}
+.cam-fallback{position:absolute;left:50%;transform:translateX(-50%);top:50%;z-index:2}
+.cam-count{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 70px);background:rgba(229,72,58,.9);padding:2px 12px;border-radius:999px;font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero" id="hero">
+  <div class="wrap">
+    <button type="button" class="gear" id="setBtn" aria-expanded="false" aria-controls="settings">화면 설정</button>
+    <p class="hero-sub">낭산초등학교 6학년 · 2026. 11. 5.(목) ~ 6.(금) 1박 2일</p>
+    <h1 id="heroTitle">경주 수학여행 길잡이</h1>
+    <p class="hero-status" id="heroStatus"><i></i><span>불러오는 중…</span></p>
+  </div>
+  <svg class="sky" viewBox="0 0 360 96" preserveAspectRatio="xMidYMax slice" role="img" aria-label="달이 뜬 경주의 밤 풍경: 고분 봉분과 첨성대의 실루엣">
+    <circle cx="296" cy="26" r="19" style="fill:none;stroke:#E3B44A;opacity:.28"/>
+    <circle cx="296" cy="26" r="12" style="fill:#E3B44A"/>
+    <path d="M-30 96 C -4 40 80 40 112 96 Z" style="fill:#1F4744"/>
+    <path d="M204 96 C 232 44 330 40 390 96 Z" style="fill:#1F4744"/>
+    <path d="M78 96 C 104 58 170 58 204 96 Z" style="fill:#1A3C3B"/>
+    <path d="M150 96 C 166 74 214 74 236 96 Z" style="fill:#2F6B63"/>
+    <g style="fill:#9DBDB6">
+      <rect x="120" y="30" width="24" height="5" rx="1"/>
+      <path d="M125 35 L139 35 C138 52 146 76 152 96 L112 96 C118 76 126 52 125 35 Z"/>
+    </g>
+    <rect x="128" y="56" width="8" height="11" style="fill:#14282D"/>
+    <rect x="0" y="92" width="360" height="4" style="fill:#0D1C20"/>
+  </svg>
+</header>
+
+<div class="wrap">
+  <section class="card settings" id="settings" hidden aria-label="화면 설정">
+    <h3>화면 설정</h3>
+    <div class="grp2"><b>글자 크기</b>
+      <div class="seg" role="group" aria-label="글자 크기">
+        <button type="button" data-pref="fs:90">작게</button><button type="button" data-pref="fs:100">보통</button><button type="button" data-pref="fs:115">크게</button><button type="button" data-pref="fs:130">아주 크게</button>
+      </div></div>
+    <div class="grp2"><b>화면 색</b>
+      <div class="seg" role="group" aria-label="화면 색">
+        <button type="button" data-pref="theme:auto">기기 설정 따라</button><button type="button" data-pref="theme:light">밝게</button><button type="button" data-pref="theme:dark">어둡게</button>
+      </div></div>
+    <div class="grp2" style="margin-bottom:0"><b>화면 배치</b>
+      <div class="seg" role="group" aria-label="화면 배치">
+        <button type="button" data-pref="layout:auto">자동</button><button type="button" data-pref="layout:narrow">세로형(휴대폰)</button><button type="button" data-pref="layout:wide">가로형(넓은 화면)</button>
+      </div></div>
+    <div class="grp2"><b>기록 알림</b>
+      <div class="seg" role="group" aria-label="기록 알림 간격">
+        <button type="button" data-pref="remind:0">끄기</button><button type="button" data-pref="remind:30">30분마다</button><button type="button" data-pref="remind:60">1시간마다</button><button type="button" data-pref="remind:120">2시간마다</button>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <button type="button" class="btn small" id="rmPerm">알림창 허용</button>
+        <button type="button" class="btn small" id="rmTest">알림 시험</button>
+        <button type="button" class="btn small" id="rmIcs">휴대전화 달력에 넣기</button>
+      </div>
+      <p class="note" id="rmNote" style="margin:6px 0 0"></p>
+    </div>
+    <p class="note" style="margin:10px 0 0">설정은 이 기기에 기억돼요. 화면 크기에 따라 배치는 자동으로 바뀌어요.</p>
+  </section>
+</div>
+
+<main id="main">
+
+  <!-- 일정 -->
+  <section class="tab on" id="tab-schedule" aria-labelledby="h-schedule">
+    <div class="two sched">
+      <div class="side">
+        <h2 id="h-schedule">일정</h2>
+        <p class="lead">장소 이름을 누르면 설명을 볼 수 있어요.</p>
+        <div class="seg" id="modeSeg" role="group" aria-label="일정 종류">
+          <button type="button" data-mode="basic" aria-pressed="true">기본 일정</button>
+          <button type="button" data-mode="rain" aria-pressed="false">비 오는 날 일정</button>
+        </div>
+        <div class="seg" id="daySeg" role="group" aria-label="날짜">
+          <button type="button" data-day="0" aria-pressed="true">1일차 · 11/5(목)</button>
+          <button type="button" data-day="1" aria-pressed="false">2일차 · 11/6(금)</button>
+        </div>
+        <p class="note" id="schedNote"></p>
+        <p class="note">※ 숙소와 세부 일정은 상황에 따라 바뀔 수 있어요. 바뀌면 선생님이 알려 줘요. (출처: 2026학년도 테마식 현장체험학습 운영계획)</p>
+      </div>
+      <ol class="tl" id="timeline"></ol>
+    </div>
+  </section>
+
+  <!-- 장소 -->
+  <section class="tab" id="tab-places" aria-labelledby="h-places">
+    <h2 id="h-places">장소 이야기</h2>
+    <p class="lead">가기 전에 읽어 보고, 가서는 "생각해 볼까요?"에 답해 봐요.</p>
+    <div id="placeList"></div>
+    <p class="note">장소 설명은 아래에 적은 기사·공식 소식지를 바탕으로 쉽게 다시 썼어요. 요금과 운영 시간은 바뀔 수 있으니 현장 안내를 확인해요.</p>
+  </section>
+
+  <!-- 기록 -->
+  <section class="tab" id="tab-journal" aria-labelledby="h-journal">
+    <div class="two jr"><div class="col jleft">
+    <h2 id="h-journal">나의 여행 기록</h2>
+    <p class="lead">사진·영상·글을 남기면 여행이 끝난 뒤 소감문을 쓸 때 큰 도움이 돼요.</p>
+    <div class="card" id="composer">
+      <label class="f" for="jPlace">어디에서 있었던 일인가요?</label>
+      <select id="jPlace"></select>
+      <p class="note" id="jHint" style="margin:6px 0 0"></p>
+      <label class="f" for="jText">오늘의 기록</label>
+      <textarea id="jText" placeholder="보고, 듣고, 느낀 것을 자유롭게 써요."></textarea>
+      <div class="thumbs" id="jThumbs"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button type="button" class="btn" id="jShoot">사진 찍기</button>
+        <button type="button" class="btn" id="jRec">영상 찍기</button>
+        <button type="button" class="btn" id="jPick">앨범에서 고르기</button>
+        <input type="file" id="fShoot" accept="image/*" capture="environment" hidden>
+        <input type="file" id="fRec" accept="video/*" capture="environment" hidden>
+        <input type="file" id="fPick" accept="image/*,video/*" multiple hidden>
+        <button type="button" class="btn primary" id="jSave">기록 저장</button>
+        <button type="button" class="btn" id="jCancel" hidden>고치기 취소</button>
+      </div>
+      <p class="err" id="jMsg" role="status"></p>
+    </div>
+    <p class="note">로그인은 필요 없어요. 기록·사진·영상은 <b>지금 쓰는 이 기기의 브라우저에만</b> 저장되어서, 같은 링크로 들어온 다른 친구의 기록은 서로 보이지 않아요. 다른 기기에서는 보이지 않고, 브라우저 데이터를 지우면 사라져요. 여행이 끝나면 '인쇄 · PDF로 저장'으로 꼭 백업해 둬요. 사진과 영상에 다른 사람의 얼굴이 나오면 미리 허락을 받아요. 영상은 용량이 커서 저장 공간을 많이 써요. 영상 하나는 100MB까지, 한 기록에 3개까지 넣을 수 있어요. 인쇄 · PDF에는 영상이 들어가지 않고 개수만 표시돼요.</p>
+    <p class="note">사진·영상 찍기는 이 화면 안의 카메라로 찍어요. 카메라가 열리지 않으면 "기본 카메라 앱으로 찍기"를 눌러요. 기본 카메라 앱을 다녀오다가 화면이 새로 불러와지면 사진이 사라질 수 있어요. 그럴 때는 휴대전화 카메라 앱으로 먼저 찍고 "앨범에서 고르기"로 골라 주세요. 쓰던 글과 이미 담은 사진·영상은 화면이 새로 불러와져도 남아 있어요.</p>
+    <p class="note" id="remindInfo"></p>
+    <p class="note" id="jStore"></p>
+    </div><div class="col">
+    <div class="entries" id="entries"></div>
+    <div class="btn-row" id="exportBox" hidden>
+      <button type="button" class="btn" id="jPrint">인쇄 · PDF로 저장</button>
+    </div>
+    </div></div>
+  </section>
+
+  <!-- 비상 -->
+  <section class="tab" id="tab-safety" aria-labelledby="h-safety">
+    <div class="two sf"><div class="col">
+    <div class="sos">
+      <h2 id="h-safety">위급할 때</h2>
+      <p>크게 다치거나 위험하면 먼저 119에 전화해요.</p>
+      <a href="tel:119" aria-label="119에 전화하기">119</a>
+    </div>
+    <ol class="steps card" style="margin-top:12px;padding-left:34px">
+      <li><b>다쳤거나 아프면</b> 참지 말고 바로 선생님께 말해요.</li>
+      <li><b>모둠에서 떨어졌으면</b> 멀리 움직이지 말고 안전한 곳에서 기다리며 선생님께 전화해요.</li>
+      <li><b>놀이기구·계단·물가</b>에서는 직원과 선생님의 안내를 따라요.</li>
+    </ol>
+
+    <div class="sec card">
+      <h3>가까운 도움 기관</h3>
+      <ul class="tellist">
+        <li><span><span class="nm">더케이호텔 경주</span><span class="rl">우리 숙소</span></span><a href="tel:0547458100">054-745-8100</a></li>
+        <li><span><span class="nm">경주 황오 119 안전센터</span></span><a href="tel:0547780601">054-778-0601</a></li>
+        <li><span><span class="nm">경주 동국대병원 응급실</span></span><a href="tel:0547489300">054-748-9300</a></li>
+      </ul>
+      <p class="note" style="margin:8px 0 0">출처: 2026학년도 테마식 현장체험학습 운영계획(비상시 현지 기관 정보)</p>
+    </div>
+
+    </div><div class="col">
+    <div class="sec" style="margin-top:0">
+      <h3>여행 약속</h3>
+      <details class="rules" open><summary>이동할 때</summary><ul>
+        <li>차를 탈 때는 반드시 안전벨트를 매요.</li>
+        <li>타고 내릴 때 질서를 지키고, 정해진 승차 시간을 꼭 지켜요.</li>
+        <li>차 밖으로 손을 내밀거나 쓰레기를 버리지 않아요.</li>
+        <li>차 안에서는 조용히 하고 인솔교사의 말을 따라요.</li>
+        <li>기차와 지하철을 탈 때 안전에 유의해요.</li>
+        <li>체험 중에는 모둠으로 움직이는 것이 원칙이에요.</li>
+      </ul></details>
+      <details class="rules"><summary>숙소에서</summary><ul>
+        <li>실내에서 소란을 피워 다른 사람에게 피해를 주지 않아요.</li>
+        <li>선생님의 허락 없이 밖에 나가지 않고, 다른 방에도 들어가지 않아요.</li>
+        <li>학생 신분에 어긋나는 행동으로 다른 사람에게 피해를 주지 않아요.</li>
+        <li>취침·기상·식사 시간을 잘 지켜요.</li>
+        <li>숙소 위치를 정확히 알고, 선생님과 부모님 전화번호를 메모해 둬요.</li>
+      </ul></details>
+      <details class="rules"><summary>준비물과 옷차림</summary><ul>
+        <li>도시락, 목적지 안내 자료, 필기도구를 챙겨요.</li>
+        <li>간단한 옷차림에 초겨울 점퍼를 준비하고, 머리와 용모를 단정히 해요.</li>
+        <li>신발은 가볍고 신기 편한 운동화로 해요. 구두·슬리퍼·샌들은 안 돼요.</li>
+        <li>큰돈은 가져오지 않아요. 카메라와 휴대전화는 스스로 잘 챙기고, 잃어버리면 본인 책임이에요.</li>
+      </ul></details>
+      <p class="note">출처: 2026학년도 테마식 현장체험학습 운영계획(안전지도 · 사전안전교육). 사전 안전교육은 11월 4일(수) 12:40 6학년 교실에서 해요.</p>
+    </div>
+    </div></div>
+  </section>
+
+</main>
+
+<div class="cam" id="cam" hidden role="dialog" aria-modal="true" aria-label="카메라">
+  <video id="camV" autoplay playsinline muted></video>
+  <p class="cam-msg" id="camMsg" role="status"></p>
+  <div class="cam-count" id="camCount" hidden></div>
+  <button type="button" class="btn primary cam-fallback" id="camFallback" hidden>기본 카메라 앱으로 찍기</button>
+  <div class="cam-bar">
+    <button type="button" class="btn" id="camClose">닫기</button>
+    <button type="button" class="cam-shot" id="camShot" aria-label="촬영"></button>
+    <button type="button" class="btn" id="camFlip">앞뒤 전환</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="alert" hidden>
+  <p id="toastText"></p>
+  <div class="btn-row" style="margin:0"><button type="button" class="btn primary small" id="toastGo">기록하러 가기</button><button type="button" class="btn small" id="toastLater">나중에</button></div>
+</div>
+
+<nav class="tabbar" aria-label="메뉴">
+  <ul>
+    <li><button type="button" data-tab="schedule" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>일정</button></li>
+    <li><button type="button" data-tab="places"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-10.5a6.5 6.5 0 0113 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg>장소</button></li>
+    <li><button type="button" data-tab="journal"><svg viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2 2 0 013 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>기록</button></li>
+    <li><button type="button" class="danger" data-tab="safety"><svg viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.1 8-7.5 9.5-4.4-1.5-7.5-4.9-7.5-9.5V6L12 3z"/><path d="M12 8.5v4M12 15.5h.01"/></svg>비상</button></li>
+  </ul>
+</nav>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- 도우미 ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={
+  get(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){}},
+  del(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+const TRIP={d1:'2026-11-05',d2:'2026-11-06'};
+const PLAN_SRC='2026학년도 테마식 현장체험학습 운영계획';
+
+/* ---------- 장소 자료 ---------- */
+const PLACES=[
+{id:'world',name:'경주월드',tag:'놀이공원',short:'보문관광단지의 스릴 놀이공원',
+ summary:'경주 보문관광단지에 있는 놀이공원이에요. 1985년에 "도투락월드"라는 이름으로 문을 열었다가 지금의 이름이 됐어요.',
+ facts:['대표 놀이기구 "드라켄"은 90도로 수직하강하는 다이브코스터로, 우리나라에 처음 들어온 기종이에요.','2018년 5월에 북유럽 신화를 주제로 한 "드라켄밸리"가 새로 문을 열었어요.'],
+ look:['놀이기구 앞 안내판에서 키와 나이 제한을 꼭 읽어 봐요.','드라켄밸리가 북유럽 신화 이야기로 꾸며져 있어요. 이야기 속 장면을 찾아봐요.'],
+ tips:['어떤 놀이기구를 탈지는 그날 운영 상황을 보고 선생님과 함께 정해요.','안전바와 안전벨트는 직원이 확인할 때까지 기다려요.','점심을 먹을 때나 이동할 때도 모둠에서 떨어지지 않아요.'],
+ q:'가장 짜릿했던 놀이기구는 무엇이었나요? 타기 전과 탄 뒤에 마음이 어떻게 달라졌는지 써 봐요.',
+ sources:[{l:'잡플래닛 경주월드 소개',u:'https://www.jobplanet.co.kr/companies/311544/landing/삼봉개발-경주월드리조트'},{l:'와그(경주월드 이용권 안내)',u:'https://www.waug.com/activities/110561'},{l:'일간스포츠(드라켄밸리 개장)',u:'https://isplus.com/article/view/isp201805010015'}]},
+
+{id:'luge',name:'경주루지월드',tag:'체험 · 저녁',short:'보문호가 내려다보이는 무동력 카트',
+ summary:'바퀴 달린 카트(루지)를 타고 산비탈 트랙을 내려오는 체험이에요. 엔진 없이 중력으로 내려오고, 손잡이를 밀고 당겨 방향과 속도를 조절해요.',
+ facts:['리프트를 타고 전망대까지 올라가요. 리프트는 왕복 700m예요.','트랙은 화랑코스(1.6km)와 천마코스(1.4km) 두 개이고, 한 번 내려오는 데 약 5분 걸려요.','밤에는 경관조명이 켜져서 트랙이 알록달록하게 빛나요.'],
+ look:['리프트 위에서 보문관광단지와 보문호를 내려다봐요.','코스 곳곳에 카메라가 설치돼 있어요. 어디쯤인지 찾아봐요.'],
+ tips:['헬멧을 꼭 쓰고, 앞 카트와 간격을 충분히 두어요.','직원의 안내와 신호를 따라요. 탑승 기준(나이·키)은 현장 안내를 확인해요. 한 자료에는 10세 이상, 125cm 이상이면 혼자 탈 수 있다고 나와 있어요.','저녁이라 어두워요. 모둠에서 떨어지지 않아요.'],
+ q:'엔진이 없는데도 카트가 계속 내려가요. 왜 그럴까요? 내 생각을 써 봐요.',
+ sources:[{l:'경북매일(경주루지월드)',u:'https://kbmaeil.com/article/202203140329958'},{l:'경주시 소식지 152호',u:'https://www.gyeongju.go.kr/webzine/GJstory/vol152/html/sub1-3.html'},{l:'맘맘(이용 안내)',u:'https://mom-mom.net/travel/places/650ce9267b6f8db33b8df065'}]},
+
+{id:'hotel',name:'더케이호텔 경주',tag:'숙소',short:'우리가 하룻밤 묵는 곳',
+ summary:'11월 5일 밤을 보내는 숙소예요. 체크인한 뒤에는 선생님의 안내에 따라 움직여요.',
+ facts:['숙소 전화번호는 054-745-8100이에요.','체크아웃은 다음 날 아침 식사 뒤 휴식 시간(8시 30분~10시)에 해요.'],
+ look:['방에 들어가면 비상구와 계단 위치부터 확인해요. 화재나 재해 때 대피하는 방법은 사전안전교육에서 배워요.'],
+ tips:['실내에서 큰 소리를 내거나 뛰지 않아요.','선생님의 허락 없이 밖에 나가지 않고, 다른 방에도 들어가지 않아요.','취침·기상·식사 시간을 지켜요.','숙소 이름과 위치, 선생님·부모님 전화번호를 메모해 둬요.'],
+ q:'첫날 밤, 오늘 하루 중 가장 기억에 남는 순간은 무엇인가요?',
+ sources:[{l:PLAN_SRC+'(숙소·안전지도)',u:''}]},
+
+{id:'cheom',name:'첨성대',tag:'야경 · 문화유산',short:'신라 선덕여왕 때의 돌탑',
+ summary:'신라 선덕여왕 때 쌓았다고 전해지는 돌탑이에요. 『삼국사절요』에는 647년(선덕여왕 16년) 1월에 만들었다고 적혀 있어요.',
+ facts:['높이는 약 8.77m예요.','"동양에서 가장 오래된 천문대"로 소개되지만, 정말 별을 관측하던 곳인지에는 여러 의견이 있어요. 왕의 권위를 보여 주는 상징이었다는 의견도 있어요.','2016년 경주 지진(규모 5.8) 뒤에 조금 더 기울었다는 측정 결과가 있어서, 문화유산 연구기관이 계속 살펴보고 있어요.'],
+ look:['아래쪽은 둥글고 위쪽은 네모난 모양이에요. 옛 기록에도 그렇게 적혀 있어요.','허리쯤에 네모난 창이 하나 있어요. 찾아봐요.','밤에 조명이 켜지면 낮과 어떻게 다르게 보이는지 비교해 봐요.'],
+ tips:['탑에 올라가거나 만지지 않아요.','밤이라 어두워요. 모둠으로 움직이고 길을 건널 때는 선생님과 함께해요.'],
+ q:'신라 사람들은 이 탑을 왜 만들었을까요? 천문대, 상징 등 여러 의견 가운데 내 생각은 무엇인가요?',
+ sources:[{l:'주간경향(첨성대 기사)',u:'https://weekly.khan.co.kr/article/202210141451451'},{l:'경향신문 이기환의 Hi-story',u:'https://v.daum.net/v/20221018071025560'},{l:'프레시안(첨성대)',u:'https://pressian.com/pages/articles/97238'}]},
+
+{id:'wolji',name:'동궁과 월지',tag:'야경 · 문화유산',short:'통일신라 왕궁의 별궁 터',
+ summary:'통일신라 왕궁의 별궁 터예요. 674년(문무왕 14년)에 연못을 만들고 679년에 동궁을 지었다고 해요. 예전에는 안압지라고도 불렀어요.',
+ facts:['사적 제18호예요.','『삼국사기』에는 연못 가운데 섬 3개, 북쪽과 동쪽에 산봉우리 12개를 만들고 꽃나무를 심어 진귀한 새와 짐승을 길렀다고 적혀 있어요.','신라 태자가 살던 곳이고, 나라의 잔치와 손님맞이를 하던 곳이에요. 931년 경순왕이 고려 태조 왕건을 대접한 기록도 남아 있어요.','1975년 연못을 정비하다가 배, 주령구, 불상, 목간 등 약 3만 점이 나왔어요. 그중 1,100여 점은 내일 가는 국립경주박물관 월지관에서 볼 수 있어요.'],
+ look:['연못 서쪽과 남쪽 가장자리는 곧고, 동쪽과 북쪽은 구불구불해요. 어느 곳에서 봐도 연못 전체가 한눈에 안 보이게 만들었대요.','물에 비친 누각을 찾아봐요.'],
+ tips:['물가와 난간 가까이에 서지 않아요.','사진을 찍을 때 뒤로 물러서다 다치지 않게 조심해요.','밤이라 어두워요. 모둠에서 떨어지지 않아요.'],
+ q:'밤의 월지는 어떤 모습이었나요? 눈에 보인 것, 들린 것, 느낀 것을 나누어 써 봐요.',
+ sources:[{l:'텔트립(동궁과 월지)',u:'https://www.telltrip.com/domestic-travel/gyeongju-donggung-wolji-night-view-winter/'},{l:'경북매일(월지 이야기)',u:'https://kbmaeil.com/article/201709010201458'},{l:'경북매일(출토 유물)',u:'https://kbmaeil.com/article/202010130289780'},{l:'경주시 소식지 166호(국립경주박물관)',u:'https://www.gyeongju.go.kr/webzine/GJstory/vol166/html/post/5054.html'}]},
+
+{id:'wjg',name:'월정교',tag:'야경 · 문화유산',short:'왕궁 앞 냇물 위의 누각 다리',
+ summary:'왕궁 월성 남쪽 냇물 위에 놓였던 다리예요. 『삼국사기』에 760년(경덕왕 19년) 궁궐 남쪽 문천 위에 월정교와 춘양교 두 다리를 놓았다는 기록이 있어요.',
+ facts:['조선시대에 없어져 돌 교각의 흔적만 남았다가, 2008년부터 복원을 시작해 2013년에 다리가, 2018년 4월에 양쪽 문루가 완성됐어요.','길이는 약 66m이고, 돌 교각 위에 지붕 있는 누각이 얹힌 독특한 구조예요.'],
+ look:['돌로 쌓은 교각과 그 위의 목조 건물이 어떻게 이어지는지 살펴봐요.','밤에는 조명이 켜지고 물에 비친 모습이 달라져요.'],
+ tips:['난간에 기대거나 올라가지 않아요.','밤길이에요. 모둠으로 움직여요.'],
+ q:'1,200년 전 사람들은 이 다리를 건너 어디로 갔을까요? 상상해서 써 봐요.',
+ sources:[{l:'텔트립(월정교)',u:'https://www.telltrip.com/domestic-travel/gyeongju-woljeonggyo-bridge-night-view-spot/'},{l:'경북매일(문천과 월정교)',u:'https://kbmaeil.com/article/201905120250597'},{l:'서울신문(월정교 복원)',u:'https://m.go.seoul.co.kr/news/2013/11/19/20131119012015'}]},
+
+{id:'museum',name:'국립경주박물관',tag:'실내 · 역사',short:'신라 천 년을 한자리에서',
+ summary:'신라 천 년의 역사와 문화를 볼 수 있는 국립박물관이에요. 상설 전시는 신라역사관, 신라미술관, 월지관, 신라천년보고, 옥외 전시 다섯 곳이에요.',
+ facts:['신라역사관에서 반짝이는 신라 금관을 볼 수 있어요. (전시는 바뀔 수 있어요.)','성덕대왕신종(에밀레종)은 경덕왕이 아버지 성덕대왕을 위해 만들기 시작했고, 아들 혜공왕 때인 771년에 완성됐어요. 종 몸에는 하늘을 나는 "비천상"이 새겨져 있어요.','월지관에는 어젯밤 본 동궁과 월지에서 나온 유물이 전시돼 있어요.'],
+ look:['월지관에서 연못 모형과 출토 유물을 찾아봐요.','금관의 세움 장식과 드리개(늘어진 장식)를 비교해 봐요.'],
+ tips:['조용히 걷고 유물을 만지지 않아요.','사진 촬영과 플래시 사용 가능 여부는 전시실 안내를 확인해요.'],
+ q:'가장 마음에 든 유물 하나를 골라 이름, 모양, 고른 이유를 써 봐요.',
+ sources:[{l:'경주시 소식지 166호',u:'https://www.gyeongju.go.kr/webzine/GJstory/vol166/html/post/5054.html'},{l:'세이하이코리안(금관·성덕대왕신종)',u:'https://sayhikorean.com/?p=13029'},{l:'경북매일(성덕대왕신종)',u:'https://kbmaeil.com/article/202102030298794'}]},
+
+{id:'hwang',name:'황리단길',tag:'점심 · 골목',short:'한옥 골목에 카페와 가게가 모인 거리',
+ summary:'대릉원 옆 황남동에 있는 골목이에요. 전통 한옥과 오래된 골목을 살리면서 카페, 음식점, 공방이 들어서 있어요.',
+ facts:['2025년 "한국 관광의 별" 시상식에서 올해의 관광지로 뽑혔어요.','황리단길과 붙어 있는 황남동 고분군을 함께 둘러보는 사람이 많아요.','경주의 명물 빵으로 경주빵, 황남빵, 찰보리빵이 꼽혀요.'],
+ look:['오래된 한옥과 새로 생긴 가게가 어떻게 섞여 있는지 살펴봐요.','골목 끝에서 보이는 고분(무덤 언덕)을 찾아봐요.'],
+ tips:['골목이 좁고 사람이 많아요. 모둠으로 걷고 앞사람을 놓치지 않아요.','큰돈을 들고 다니지 않아요.','식사와 이동 시간은 선생님의 안내를 따라요.'],
+ q:'황리단길에서 "오래된 것"과 "새로운 것"을 세 가지씩 찾아 써 봐요.',
+ sources:[{l:'경향신문(한국 관광의 별)',u:'https://www.khan.co.kr/article/202511271747001/amp'},{l:'경북매일(황남동 고분군)',u:'https://kbmaeil.com/article/20260714500300'},{l:'경북매일(경주 명물 빵)',u:'https://kbmaeil.com/article/201709010201458'}]},
+
+{id:'beol',name:'비단벌레 전동차',tag:'체험',short:'해설과 함께 도는 전기 관광차',
+ summary:'경주 유적지 사이를 해설을 들으며 돌아보는 초록색 전기 관광차예요.',
+ facts:['소개 자료에는 월성지구 코스(계림, 향교, 교촌마을, 월정교, 월성, 첨성대 등)가 나와요. 우리가 타는 대릉원 주변 코스는 현장 안내를 확인해요.','한 번 타면 원하는 곳에서 내릴 수 없어요.'],
+ look:['해설에서 새로 알게 된 것을 하나 메모해요.','창밖으로 고분과 유적이 어떻게 이어지는지 살펴봐요.'],
+ tips:['자리에 앉고, 손이나 머리를 차 밖으로 내밀지 않아요.'],
+ q:'해설에서 들은 이야기 가운데 가장 신기했던 것은 무엇인가요?',
+ sources:[{l:'경주시 소식지 151호',u:'https://www.gyeongju.go.kr/webzine/GJstory/vol151/html/sub1-3.html'}]},
+
+{id:'dae',name:'대릉원(천마총)',tag:'고분 · 역사',short:'신라 왕과 귀족의 무덤 공원',
+ summary:'신라 왕과 귀족의 무덤(고분)이 모여 있는 곳이에요. 커다란 봉분 23기가 능선처럼 이어져 있어요.',
+ facts:['천마총은 대릉원에서 안으로 들어가 볼 수 있는 유일한 고분이에요.','1973년에 발굴됐고 지름 47m, 높이 12.7m예요. 하늘을 나는 말을 그린 "천마도"가 있는 말안장 드리개가 나와서 천마총이라는 이름이 붙었어요.','천마총 발굴로 "지상식 돌무지덧널무덤"의 구조가 분명히 밝혀졌어요.','경주역사유적지구는 2000년 11월 유네스코 세계유산에 등재됐어요. (2차 자료)'],
+ look:['봉분마다 크기가 달라요. 가장 큰 것과 가장 작은 것을 비교해 봐요.','천마총 안에서 무덤의 구조와 유물을 살펴봐요.'],
+ tips:['봉분 위로 올라가거나 기대지 않아요.','천마총 안은 통로가 좁아요. 줄을 서서 천천히 움직여요.'],
+ q:'신라 사람들은 왜 이렇게 큰 무덤을 만들었을까요? 천마총 안에서 가장 인상 깊었던 것도 함께 써 봐요.',
+ sources:[{l:'텔트립(대릉원)',u:'https://www.telltrip.com/domestic-travel/gyeongju-daereungwon-snow-scene/'},{l:'경북매일(천마총 발굴)',u:'https://kbmaeil.com/article/202103150301780'},{l:'다음 카페 게시글(경주역사유적지구, 2차 자료)',u:'https://m.cafe.daum.net/rnqdmsekfl/W21M/7'}]},
+
+{id:'zoo',name:'주렁주렁 실내 동물원(경주점)',tag:'비 오는 날',short:'미탐시티 3층 실내 동물원',
+ summary:'경주시 엑스포로 80, 미탐시티 3층에 있는 실내 동물원이에요. 비 오는 날 일정에 들어 있어요.',
+ facts:['동물 먹이주기 체험은 별도 요금이 있다고 안내돼요. (한 자료에는 3,000원)','평일 운영 시간은 11:00~17:00, 입장 마감은 16:00로 안내돼요. 바뀔 수 있으니 현장에서 확인해요.'],
+ look:['마음에 드는 동물을 한 종류 정해서 행동을 세 가지 관찰해요.'],
+ tips:['정해진 먹이만 안내에 따라 줘요.','동물을 쫓거나 소리 지르거나 함부로 만지지 않아요.','구경한 뒤에는 손을 깨끗이 씻어요.'],
+ q:'가장 오래 지켜본 동물은 무엇인가요? 그 동물이 한 행동을 세 가지 써 봐요.',
+ sources:[{l:'맘맘(주렁주렁 경주점)',u:'https://mom-mom.net/travel/places/65a9d9d91a6f3ac5bac3676c'},{l:'와그(주렁주렁 경주점)',u:'https://www.waug.com/activities/103712'}]},
+
+{id:'bomun',name:'보문관광단지',tag:'비 오는 날',short:'보문호 주변의 관광단지',
+ summary:'보문호 주변에 호텔과 놀이시설이 모여 있는 경주의 관광단지예요. 경주월드와 경주루지월드도 이곳에 있어요.',
+ facts:['루지월드 전망대에서는 보문관광단지 전경이 한눈에 보인다고 소개돼요.'],
+ look:['호숫가에서 보이는 것을 세 가지 찾아 사진이나 그림으로 남겨요.'],
+ tips:['비가 오면 바닥이 미끄러워요. 천천히 걷고 우산을 펼 때 옆 사람을 살펴요.'],
+ q:'비 오는 날의 보문호는 어떤 모습이었나요? 소리와 냄새도 함께 써 봐요.',
+ sources:[{l:'경북매일(경주루지월드)',u:'https://kbmaeil.com/article/202203140329958'},{l:'서울신문(경주월드 소식)',u:'https://m.go.seoul.co.kr/news/2026/07/13/20260713019006'}]}
+];
+const PL=Object.fromEntries(PLACES.map(p=>[p.id,p]));
+
+/* ---------- 일정 자료: [시작,끝,제목,종류,장소문구,메모,장소id들] ---------- */
+const SCHED={
+basic:[[
+ ['06:30','07:00','익산역에 모여요','m','익산역','자율등교'],
+ ['07:00','10:30','익산역 → 경주월드로 이동','m','','기차(익산역·오송역·경주역)를 타고 경주역에서 택시'],
+ ['10:30','17:00','경주월드 투어','a','경주월드','투어 중 점심 식사',['world']],
+ ['17:00','17:30','숙소 체크인','r','더케이호텔 경주','도보 이동',['hotel']],
+ ['17:30','18:30','저녁 식사','f','','도보 이동'],
+ ['18:30','19:30','루지 체험','a','루지월드','도보 이동',['luge']],
+ ['19:30','20:00','루지월드 → 첨성대로 이동','m','','택시 이동'],
+ ['20:00','21:00','첨성대 · 동궁과 월지 · 월정교 관람','a','','',['cheom','wolji','wjg']],
+ ['21:00','21:30','첨성대 → 숙소로 이동','m','','택시 이동'],
+ ['21:30','22:00','세면 및 취침 준비','r'],
+ ['22:00','06:30','취침','r','','숙소를 벗어나거나 방을 옮기지 않아요']
+],[
+ ['06:30','07:30','기상 및 세면','r'],
+ ['07:30','08:30','아침 식사','f'],
+ ['08:30','10:00','휴식 후 체크아웃','r','더케이호텔 경주','',['hotel']],
+ ['10:00','10:30','국립경주박물관으로 이동','m','','택시 이동'],
+ ['10:30','11:30','국립경주박물관 관람','a','국립경주박물관','',['museum']],
+ ['12:30','13:00','점심 식사','f','황리단길','',['hwang']],
+ ['13:00','13:30','비단벌레 전동차 체험','a','천마총 주차장','대릉원 주변 관람',['beol']],
+ ['13:30','14:10','대릉원(천마총) 관람','a','대릉원','',['dae']],
+ ['14:10','14:30','경주역으로 이동','m','','택시 이동'],
+ ['14:30','17:00','경주역 → 익산역으로 이동','m','','기차 이동'],
+ ['17:00','17:30','하교 지도','r','','부모님을 직접 만나 인계한 뒤 함께 하교하는 것이 원칙이에요']
+]],
+rain:[[
+ ['08:30','09:00','익산역에 모여요','m','익산역','자율등교'],
+ ['09:30','11:40','익산역 → 경주역으로 이동','m','','기차 이동(익산역·오송역·경주역)'],
+ ['11:40','12:10','경주역 → 보문관광단지로 이동','m','','택시 이동'],
+ ['12:10','13:00','점심 식사','f','보문관광단지','',['bomun']],
+ ['13:00','15:00','주렁주렁 동물원 경주점 관람','a','','',['zoo']],
+ ['15:00','16:00','숙소 체크인 후 휴식','r','더케이호텔 경주','',['hotel']],
+ ['16:00','17:00','보문관광단지 관람','a','','',['bomun']],
+ ['17:00','18:00','저녁 식사','f','','도보 이동'],
+ ['18:00','18:30','동궁과 월지로 이동','m','','택시 이동'],
+ ['18:30','20:30','동궁과 월지 · 첨성대 · 월정교 관람','a','','',['wolji','cheom','wjg']],
+ ['20:30','21:00','월정교 → 숙소로 이동','m','','택시 이동'],
+ ['21:00','22:00','세면 및 취침 준비','r'],
+ ['22:00','06:30','취침','r','','숙소를 벗어나거나 방을 옮기지 않아요']
+],[
+ ['06:30','07:30','기상 및 세면','r'],
+ ['07:30','08:30','아침 식사','f'],
+ ['08:30','10:00','휴식 후 체크아웃','r','더케이호텔 경주','',['hotel']],
+ ['10:00','10:30','국립경주박물관으로 이동','m','','택시 이동'],
+ ['10:30','12:00','국립경주박물관 관람','a','국립경주박물관','',['museum']],
+ ['12:00','13:00','점심 식사','f'],
+ ['13:00','13:30','비단벌레 전동차 체험','a','천마총 주차장','',['beol']],
+ ['13:30','14:10','카페에서 휴식','r','황리단길','',['hwang']],
+ ['14:10','14:30','경주역으로 이동','m','','택시 이동'],
+ ['14:30','17:00','경주역 → 익산역으로 이동','m','','기차 이동'],
+ ['17:00','17:30','하교 지도','r','','부모님을 직접 만나 인계한 뒤 함께 하교하는 것이 원칙이에요']
+]]};
+Object.keys(SCHED).forEach(m=>SCHED[m]=SCHED[m].map(day=>day.map(a=>({t:a[0],e:a[1],title:a[2],k:a[3],at:a[4]||'',note:a[5]||'',pl:a[6]||[]}))));
+
+/* ---------- 시간 ---------- */
+const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m};
+function kstNow(){
+  const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+  const g=t=>p.find(x=>x.type===t).value;
+  return {date:g('year')+'-'+g('month')+'-'+g('day'),min:(+g('hour'))*60+(+g('minute')),hh:g('hour'),mm:g('minute')};
+}
+const dayDiff=(a,b)=>Math.round((Date.UTC(...b.split('-').map((x,i)=>i===1?+x-1:+x))-Date.UTC(...a.split('-').map((x,i)=>i===1?+x-1:+x)))/86400000);
+
+const state={mode:store.get('kj_mode')==='rain'?'rain':'basic',day:0,tab:'schedule'};
+{const n=kstNow(); if(n.date===TRIP.d2&&n.min>=390) state.day=1;}
+
+function whereNow(){
+  const n=kstNow(); let day=-1, m=n.min;
+  if(n.date===TRIP.d1) day=0;
+  else if(n.date===TRIP.d2){ day=1; if(m<390){day=0;m+=1440;} }
+  if(day<0) return null;
+  const list=SCHED[state.mode][day];
+  let cur=-1,next=-1;
+  for(let i=0;i<list.length;i++){
+    const s=toMin(list[i].t); let e=toMin(list[i].e); if(e<=s) e+=1440;
+    if(m>=s&&m<e){cur=i;break;}
+    if(s>m&&next<0) next=i;
+  }
+  return {day,cur,next};
+}
+function statusText(){
+  const n=kstNow(); const w=whereNow();
+  if(w){
+    const list=SCHED[state.mode][w.day];
+    if(w.cur>=0) return '지금 · '+list[w.cur].title;
+    if(w.next>=0) return '다음 · '+list[w.next].t+' '+list[w.next].title;
+    return '오늘 일정이 모두 끝났어요';
+  }
+  const d=dayDiff(n.date,TRIP.d1);
+  if(d>0) return '출발까지 '+d+'일 남았어요';
+  return '다녀왔어요! 기록장을 정리해 봐요';
+}
+function renderHero(){ $('#heroStatus span').textContent=statusText(); }
+
+/* ---------- 일정 화면 ---------- */
+function renderSchedule(){
+  $$('#modeSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));
+  $$('#daySeg button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.day===state.day)));
+  const list=SCHED[state.mode][state.day];
+  const w=whereNow(); const curIdx=(w&&w.day===state.day)?w.cur:-1;
+  const ol=$('#timeline'); ol.innerHTML='';
+  list.forEach((s,i)=>{
+    const li=document.createElement('li');
+    li.className='tl-item k-'+s.k+(i===curIdx?' now':'');
+    const chips=s.pl.map(id=>`<button type="button" class="chip" data-place="${id}">${esc(PL[id].name)} 설명</button>`).join('');
+    const rec=s.pl.length?`<button type="button" class="chip plain" style="cursor:pointer" data-rec="${s.pl[0]}">기록 남기기</button>`:'';
+    const meta=[s.at,s.note].filter(Boolean).join(' · ');
+    li.innerHTML=`<div class="tl-time">${esc(s.t)}<small>${esc(s.e)}</small></div>
+      <div class="tl-body"><div class="tl-title">${esc(s.title)}${i===curIdx?'<span class="now-tag">지금</span>':''}</div>
+      ${meta?`<div class="tl-meta">${esc(meta)}</div>`:''}
+      ${(chips||rec)?`<div class="chips">${chips}${rec}</div>`:''}</div>`;
+    ol.append(li);
+  });
+  $('#schedNote').textContent=state.mode==='rain'?'비가 올 때 바뀌는 일정이에요. 실제로 바뀌는지는 선생님이 알려 줘요.':'';
+}
+
+/* ---------- 장소 화면 ---------- */
+function whenText(id){
+  const out=[];
+  ['basic','rain'].forEach(m=>SCHED[m].forEach((day,di)=>day.forEach(s=>{if(s.pl.includes(id)) out.push((m==='basic'?'기본':'비 오는 날')+' '+(di+1)+'일차 '+s.t);})));
+  return out.join(' · ');
+}
+function renderPlaces(){
+  const box=$('#placeList'); box.innerHTML='';
+  PLACES.forEach(p=>{
+    const d=document.createElement('details'); d.className='place'; d.id='place-'+p.id;
+    const src=p.sources.map(s=>s.u?`<a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.l)}</a>`:`<span>${esc(s.l)}</span>`).join('');
+    d.innerHTML=`<summary><span><span class="pn">${esc(p.name)}</span><span class="ps">${esc(p.short)}</span></span><span class="pt">${esc(p.tag)}</span></summary>
+    <div class="pbody">
+      <p style="margin:10px 0 0">${esc(p.summary)}</p>
+      <p class="when">언제 가요? ${esc(whenText(p.id)||'일정에 없어요')}</p>
+      <h3>알아 두면 좋아요</h3><ul>${p.facts.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+      <h3>이렇게 살펴봐요</h3><ul>${p.look.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+      <h3>안전과 매너</h3><ul>${p.tips.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+      <div class="q"><b>생각해 볼까요?</b>${esc(p.q)}</div>
+      <div class="row"><button type="button" class="btn primary small" data-rec="${p.id}">여기서 기록 남기기</button></div>
+      <p class="src">출처: ${src}</p>
+    </div>`;
+    box.append(d);
+  });
+}
+function openPlace(id){
+  showTab('places');
+  const d=$('#place-'+id); if(!d) return;
+  $$('details.place').forEach(x=>{if(x!==d)x.open=false;});
+  d.open=true;
+  setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),30);
+}
+
+/* ---------- 기록 ---------- */
+const DB={db:null,mem:[],
+  async init(){
+    try{
+      if(!('indexedDB' in window)) throw new Error('none');
+      this.db=await new Promise((res,rej)=>{
+        const r=indexedDB.open('kj-trip-2026',1);
+        r.onupgradeneeded=()=>r.result.createObjectStore('entries',{keyPath:'id'});
+        r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); r.onblocked=()=>rej(new Error('blocked'));
+      });
+    }catch(e){this.db=null;}
+  },
+  all(){
+    if(!this.db) return Promise.resolve(this.mem.slice());
+    return new Promise((res,rej)=>{const q=this.db.transaction('entries','readonly').objectStore('entries').getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});
+  },
+  put(e){
+    if(!this.db){const i=this.mem.findIndex(x=>x.id===e.id); if(i>=0)this.mem[i]=e; else this.mem.push(e); return Promise.resolve();}
+    return new Promise((res,rej)=>{const t=this.db.transaction('entries','readwrite');t.objectStore('entries').put(e);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});
+  },
+  del(id){
+    if(!this.db){this.mem=this.mem.filter(x=>x.id!==id);return Promise.resolve();}
+    return new Promise((res,rej)=>{const t=this.db.transaction('entries','readwrite');t.objectStore('entries').delete(id);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);});
+  }
+};
+DB.putDraft=function(d){d.id='__draft__';return this.put(d);};
+DB.getDraft=function(){return this.all().then(l=>l.find(x=>x.id==='__draft__')||null);};
+DB.delDraft=function(){return this.del('__draft__');};
+const J={photos:[],videos:[],editing:null,list:[],turls:[],eurls:[],ready:false};
+const mb=n=>(n/1048576).toFixed(n<10485760?1:0)+'MB';
+const revoke=a=>{a.forEach(u=>{try{URL.revokeObjectURL(u)}catch(e){}});a.length=0;};
+const fmtTime=ts=>new Date(ts).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit'});
+
+function fillPlaceSelect(sel){
+  const s=$('#jPlace'); s.innerHTML='';
+  const opt=(v,t)=>{const o=document.createElement('option');o.value=v;o.textContent=t;s.append(o);};
+  opt('free','자유롭게 쓰기');
+  PLACES.forEach(p=>opt(p.id,p.name));
+  s.value=sel&&(sel==='free'||PL[sel])?sel:'free';
+  updateHint();
+}
+function updateHint(){
+  const v=$('#jPlace').value; const p=PL[v];
+  $('#jHint').textContent=p?'생각해 볼까요? '+p.q:'';
+}
+function renderThumbs(){
+  revoke(J.turls);
+  const box=$('#jThumbs'); box.innerHTML='';
+  J.photos.forEach((src,i)=>{
+    const d=document.createElement('div'); d.className='thumb';
+    const im=new Image(); im.src=src; im.alt='선택한 사진 '+(i+1);
+    const b=document.createElement('button'); b.type='button'; b.textContent='×'; b.setAttribute('aria-label','사진 빼기'); b.dataset.rm=String(i);
+    d.append(im,b); box.append(d);
+  });
+  J.videos.forEach((blob,i)=>{
+    const d=document.createElement('div'); d.className='thumb';
+    const v=document.createElement('video'); v.muted=true; v.playsInline=true; v.preload='metadata';
+    try{const u=URL.createObjectURL(blob); J.turls.push(u); v.src=u+'#t=0.1';}catch(e){}
+    v.addEventListener('error',()=>{d.classList.add('novid'); v.remove(); d.insertBefore(document.createTextNode('영상 '+mb(blob.size)),d.firstChild);},{once:true});
+    const vb=document.createElement('span'); vb.className='vb'; vb.textContent='▶ '+mb(blob.size);
+    const b=document.createElement('button'); b.type='button'; b.textContent='×'; b.setAttribute('aria-label','영상 빼기'); b.dataset.rmv=String(i);
+    d.append(v,vb,b); box.append(d);
+  });
+  saveDraftSoon();
+}
+function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(f);});}
+function loadImg(src){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error('img'));im.src=src;});}
+async function shrink(file,max=1280,q=0.82){
+  let src;
+  try{ src=await createImageBitmap(file,{imageOrientation:'from-image'}); }
+  catch(e){ src=await loadImg(await readFile(file)); }
+  const w=src.width||src.naturalWidth, h=src.height||src.naturalHeight;
+  const s=Math.min(1,max/Math.max(w,h));
+  const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w*s)); c.height=Math.max(1,Math.round(h*s));
+  c.getContext('2d').drawImage(src,0,0,c.width,c.height);
+  return c.toDataURL('image/jpeg',q);
+}
+function jmsg(t,ok){const m=$('#jMsg');m.textContent=t;m.style.color=ok?'var(--tile)':'var(--red)';}
+async function refreshEntries(){
+  revoke(J.eurls);
+  try{J.list=(await DB.all()).filter(x=>x.id!=='__draft__').sort((a,b)=>b.at-a.at);}catch(e){J.list=[];}
+  const box=$('#entries'); box.innerHTML='';
+  if(!J.list.length){
+    const d=document.createElement('div'); d.className='empty'; d.textContent='아직 기록이 없어요. 첫 기록을 남겨 봐요!'; box.append(d);
+  }
+  J.list.forEach(e=>{
+    const a=document.createElement('article'); a.className='entry';
+    const p=PL[e.place];
+    const head=document.createElement('div'); head.className='entry-head';
+    const st=document.createElement('strong'); st.textContent=p?p.name:'자유 기록';
+    const tm=document.createElement('time'); tm.textContent=fmtTime(e.at);
+    head.append(st,tm); a.append(head);
+    if(e.photos&&e.photos.length){
+      const g=document.createElement('div'); g.className='photos p'+Math.min(e.photos.length,2);
+      e.photos.forEach(src=>{const im=new Image(); im.src=src; im.alt='기록 사진'; im.loading='lazy'; g.append(im);});
+      a.append(g);
+    }
+    if(e.videos&&e.videos.length){
+      const g=document.createElement('div'); g.className='vbox';
+      e.videos.forEach(b=>g.append(videoEl(b)));
+      a.append(g);
+      const vn=document.createElement('p'); vn.className='vnote'; vn.textContent='영상 '+e.videos.length+'개'; a.append(vn);
+    }
+    if(e.text){const t=document.createElement('p'); t.className='entry-text'; t.textContent=e.text; a.append(t);}
+    const act=document.createElement('div'); act.className='entry-actions';
+    const b1=document.createElement('button'); b1.type='button'; b1.className='btn small'; b1.textContent='고치기'; b1.dataset.edit=e.id;
+    const b2=document.createElement('button'); b2.type='button'; b2.className='btn small'; b2.textContent='지우기'; b2.dataset.del=e.id;
+    act.append(b1,b2); a.append(act);
+    box.append(a);
+  });
+  syncExport(); showStore();
+}
+function videoEl(b){
+  const w=document.createElement('div'); w.className='vwrap';
+  const v=document.createElement('video'); v.controls=true; v.playsInline=true; v.preload='metadata';
+  let u=''; try{u=URL.createObjectURL(b); J.eurls.push(u);}catch(e){}
+  v.src=u;
+  let tried=false;
+  v.addEventListener('error',()=>{
+    if(!tried&&b.size<=30*1048576){tried=true; readFile(b).then(d=>{v.src=d;}).catch(()=>{});return;}
+    const p=document.createElement('p'); p.className='note'; p.textContent='이 화면에서는 영상을 재생할 수 없어요. 영상은 기기에 저장되어 있어요.'; v.replaceWith(p);
+  });
+  const cap=document.createElement('div'); cap.className='vcap';
+  const sp=document.createElement('span'); sp.textContent='영상 · '+mb(b.size); cap.append(sp);
+  if(u){const a=document.createElement('a'); a.className='btn small'; a.href=u; a.textContent='영상 저장'; const ty=b.type||''; a.download='경주수학여행_영상.'+(ty.includes('webm')?'webm':ty.includes('quicktime')?'mov':'mp4'); cap.append(a);}
+  w.append(v,cap); return w;
+}
+async function showStore(){
+  const el=$('#jStore'); if(!el) return;
+  try{ if(navigator.storage&&navigator.storage.estimate){const s=await navigator.storage.estimate(); if(s&&s.quota) el.textContent='이 기기의 저장 공간: 약 '+mb(s.usage||0)+' 사용 / '+mb(s.quota)+' 중 (브라우저가 알려 주는 대략의 값이에요)';} }catch(e){}
+}
+function syncExport(){ $('#exportBox').hidden=!J.list.length; }
+function resetComposer(sel){
+  J.photos=[]; J.videos=[]; J.editing=null; $('#jText').value=''; $('#jCancel').hidden=true; $('#jSave').textContent='기록 저장';
+  fillPlaceSelect(sel); renderThumbs();
+}
+function defaultPlace(){
+  const w=whereNow(); if(!w) return 'free';
+  const list=SCHED[state.mode][w.day]; const it=list[w.cur>=0?w.cur:(w.next>=0?w.next:0)];
+  return it&&it.pl&&it.pl[0]?it.pl[0]:'free';
+}
+async function saveEntry(){
+  const text=$('#jText').value.trim();
+  if(!text&&!J.photos.length&&!J.videos.length){jmsg('글, 사진, 영상 중 하나는 남겨 주세요.',false);return;}
+  const old=J.editing?J.list.find(x=>x.id===J.editing):null;
+  const e={id:old?old.id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),place:$('#jPlace').value,text,photos:J.photos.slice(),videos:J.videos.slice(),at:old?old.at:Date.now()};
+  $('#jSave').disabled=true;
+  try{
+    await DB.put(e);
+    jmsg(DB.db?'저장했어요!':'저장했어요. 이 기기에서는 화면을 닫으면 사라질 수 있어요.',true);
+    resetComposer(e.place);
+    await refreshEntries();
+  }catch(err){
+    jmsg('저장하지 못했어요. 영상이나 사진 수를 줄이거나 저장 공간을 확인해 주세요.',false);
+  }finally{$('#jSave').disabled=false;}
+}
+function startEdit(id){
+  const e=J.list.find(x=>x.id===id); if(!e) return;
+  J.editing=id; J.photos=(e.photos||[]).slice(); J.videos=(e.videos||[]).slice();
+  fillPlaceSelect(e.place); $('#jText').value=e.text||''; renderThumbs();
+  $('#jCancel').hidden=false; $('#jSave').textContent='고친 내용 저장';
+  $('#composer').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function askDelete(btn){
+  if(btn.dataset.armed){ 
+    DB.del(btn.dataset.del).then(refreshEntries).catch(()=>jmsg('지우지 못했어요.',false));
+    return;
+  }
+  btn.dataset.armed='1'; btn.textContent='한 번 더 누르면 지워져요'; btn.classList.add('danger');
+  setTimeout(()=>{ if(btn.isConnected){delete btn.dataset.armed;btn.textContent='지우기';btn.classList.remove('danger');} },4000);
+}
+
+/* ---------- 화면 설정 ---------- */
+const PREF={fs:+store.get('kj_fs')||100,theme:store.get('kj_theme')||'auto',layout:store.get('kj_layout')||'auto',remind:store.get('kj_remind')===null?'60':store.get('kj_remind')};
+function applyPref(){
+  const r=document.documentElement;
+  r.style.setProperty('--fs',PREF.fs+'%');
+  if(PREF.theme==='light'||PREF.theme==='dark') r.setAttribute('data-theme',PREF.theme); else r.removeAttribute('data-theme');
+  const wide=PREF.layout==='wide'||(PREF.layout==='auto'&&window.innerWidth>=900);
+  r.classList.toggle('wide',wide);
+  $$('#settings [data-pref]').forEach(b=>{const [k,v]=b.dataset.pref.split(':');b.setAttribute('aria-pressed',String(String(PREF[k])===v));});
+}
+let rz=null;
+window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(applyPref,120);});
+window.addEventListener('orientationchange',()=>setTimeout(applyPref,200));
+
+/* ---------- 앱 안 카메라 ---------- */
+const CAM={stream:null,mode:'photo',facing:'environment',rec:null,chunks:[],timer:null,t0:0};
+async function openCam(mode){
+  CAM.mode=mode; $('#cam').hidden=false; $('#camMsg').textContent=''; $('#camFallback').hidden=true; $('#camCount').hidden=true;
+  $('#camShot').classList.remove('on'); $('#camShot').classList.toggle('video',mode==='video');
+  $('#camShot').setAttribute('aria-label',mode==='video'?'녹화 시작':'촬영');
+  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){camFail('이 화면에서는 앱 안 카메라를 쓸 수 없어요.');return;}
+  await startStream();
+}
+async function startStream(){
+  stopStream();
+  try{
+    CAM.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:CAM.facing},width:{ideal:1280},height:{ideal:720}},audio:CAM.mode==='video'});
+    const v=$('#camV'); v.srcObject=CAM.stream; try{await v.play();}catch(e){}
+    $('#camMsg').textContent=CAM.mode==='video'?'● 버튼을 눌러 녹화를 시작해요.':'동그란 버튼을 눌러 찍어요.';
+  }catch(e){
+    camFail(e&&e.name==='NotAllowedError'?'카메라 사용이 허용되지 않았어요.':'앱 안 카메라를 열 수 없어요.');
+  }
+}
+function camFail(msg){ stopStream(); $('#camMsg').textContent=msg+' 대신 기본 카메라 앱으로 찍을 수 있어요.'; $('#camFallback').hidden=false; }
+function stopStream(){
+  if(CAM.rec&&CAM.rec.state!=='inactive'){try{CAM.rec.stop();}catch(e){}}
+  if(CAM.stream){CAM.stream.getTracks().forEach(x=>x.stop());CAM.stream=null;}
+  const v=$('#camV'); try{v.srcObject=null;}catch(e){}
+}
+function closeCam(){ clearInterval(CAM.timer); stopStream(); $('#cam').hidden=true; saveDraft(); }
+function snap(){
+  const v=$('#camV'); if(!v.videoWidth) return;
+  if(J.photos.length>=MAX_PH){ $('#camMsg').textContent='사진은 한 기록에 6장까지예요.'; return; }
+  const s=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight));
+  const c=document.createElement('canvas'); c.width=Math.round(v.videoWidth*s); c.height=Math.round(v.videoHeight*s);
+  c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+  J.photos.push(c.toDataURL('image/jpeg',0.82)); renderThumbs(); saveDraft();
+  $('#camMsg').textContent='찍었어요! ('+J.photos.length+'장) 계속 찍거나 "닫기"를 눌러요.';
+}
+function pickMime(){
+  const c=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  return c.find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(m))||'';
+}
+function toggleRec(){
+  if(CAM.rec&&CAM.rec.state==='recording'){ CAM.rec.stop(); return; }
+  if(!CAM.stream) return;
+  if(!window.MediaRecorder){ camFail('이 기기에서는 앱 안 녹화를 쓸 수 없어요.'); return; }
+  if(J.videos.length>=MAX_VIDS){ $('#camMsg').textContent='영상은 한 기록에 3개까지예요.'; return; }
+  CAM.chunks=[]; const mime=pickMime(); let rec;
+  try{ rec=new MediaRecorder(CAM.stream,mime?{mimeType:mime,videoBitsPerSecond:2500000}:{videoBitsPerSecond:2500000}); }
+  catch(e){ try{rec=new MediaRecorder(CAM.stream);}catch(e2){camFail('녹화를 시작할 수 없어요.');return;} }
+  CAM.rec=rec;
+  rec.ondataavailable=ev=>{if(ev.data&&ev.data.size)CAM.chunks.push(ev.data);};
+  rec.onstop=()=>{
+    clearInterval(CAM.timer); $('#camCount').hidden=true; $('#camShot').classList.remove('on');
+    const type=(rec.mimeType||mime||'video/webm').split(';')[0];
+    const blob=new Blob(CAM.chunks,{type});
+    if(blob.size>MAX_VID){ $('#camMsg').textContent='영상이 너무 커서 저장하지 못했어요. 더 짧게 찍어 주세요.'; return; }
+    if(blob.size>0){ J.videos.push(blob); renderThumbs(); saveDraft(); $('#camMsg').textContent='영상을 담았어요! ('+J.videos.length+'개)'; }
+  };
+  rec.start(1000); CAM.t0=Date.now(); $('#camShot').classList.add('on'); $('#camCount').hidden=false; $('#camCount').textContent='● 0:00'; $('#camMsg').textContent='녹화 중이에요. 다시 누르면 끝나요.';
+  CAM.timer=setInterval(()=>{
+    const s=Math.floor((Date.now()-CAM.t0)/1000);
+    $('#camCount').textContent='● '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    if(s>=120||CAM.chunks.reduce((a,b)=>a+b.size,0)>MAX_VID*0.95){ try{rec.stop();}catch(e){} }
+  },500);
+}
+$('#camShot').addEventListener('click',()=>{ if(CAM.mode==='video') toggleRec(); else snap(); });
+$('#camClose').addEventListener('click',closeCam);
+$('#camFlip').addEventListener('click',()=>{ if(CAM.rec&&CAM.rec.state==='recording') return; CAM.facing=CAM.facing==='environment'?'user':'environment'; startStream(); });
+$('#camFallback').addEventListener('click',()=>{ const m=CAM.mode; closeCam(); nativePick(m==='video'?'fRec':'fShoot'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#cam').hidden) closeCam(); });
+
+/* ---------- 쓰던 기록 임시 저장 ---------- */
+let draftT=null;
+function saveDraftSoon(){ clearTimeout(draftT); draftT=setTimeout(saveDraft,500); }
+function saveDraft(){
+  clearTimeout(draftT);
+  if(!J.ready) return;
+  const text=$('#jText').value;
+  if(!text&&!J.photos.length&&!J.videos.length){ DB.delDraft().catch(()=>{}); return; }
+  DB.putDraft({place:$('#jPlace').value,text,photos:J.photos.slice(),videos:J.videos.slice(),editing:J.editing}).catch(()=>{});
+}
+async function restoreDraft(){
+  let d=null; try{ d=await DB.getDraft(); }catch(e){}
+  const cam=+store.get('kj_cam')||0; store.del('kj_cam');
+  const recent=cam&&(Date.now()-cam<10*60000);
+  const has=d&&(d.text||(d.photos&&d.photos.length)||(d.videos&&d.videos.length));
+  if(has){
+    J.photos=d.photos||[]; J.videos=d.videos||[];
+    J.editing=(d.editing&&J.list.find(x=>x.id===d.editing))?d.editing:null;
+    fillPlaceSelect(d.place); $('#jText').value=d.text||''; renderThumbs();
+    if(J.editing){$('#jCancel').hidden=false;$('#jSave').textContent='고친 내용 저장';}
+    showTab('journal'); jmsg('저장하지 않은 기록을 다시 불러왔어요. 담아 둔 사진·영상도 그대로예요.',true);
+  }else if(recent){
+    showTab('journal'); jmsg('카메라를 다녀오는 동안 화면이 새로 불러와졌어요. 사진이 보이지 않으면 휴대전화 카메라 앱으로 찍은 뒤 "앨범에서 고르기"로 골라 주세요.',false);
+  }
+  J.ready=true;
+}
+document.addEventListener('visibilitychange',()=>{ if(document.hidden){ saveDraft(); if(!$('#cam').hidden) closeCam(); } });
+window.addEventListener('pagehide',saveDraft);
+
+/* ---------- 기록 알림 ---------- */
+const RM={last:store.get('kj_rm_last')||'',audio:null,hideT:null};
+const remindMin=()=>+PREF.remind||0;
+function slotKey(){
+  const iv=remindMin(); if(!iv) return null;
+  const n=kstNow(); if(n.date!==TRIP.d1&&n.date!==TRIP.d2) return null;
+  const st=Math.floor(n.min/iv)*iv; if(st<480||st>1260) return null;
+  return n.date+':'+st;
+}
+function audioCtx(){
+  try{ if(!RM.audio){const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; RM.audio=new C();} if(RM.audio.state==='suspended') RM.audio.resume(); return RM.audio; }catch(e){return null;}
+}
+function beep(){
+  try{ const a=audioCtx(); if(!a) return; const o=a.createOscillator(),g=a.createGain(); o.type='sine'; o.frequency.value=880;
+    g.gain.setValueAtTime(.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(.25,a.currentTime+.03); g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+.55);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+.6); }catch(e){}
+}
+function remindText(test){
+  const w=whereNow(); let where='';
+  if(w&&w.cur>=0){ where=' 지금은 "'+SCHED[state.mode][w.day][w.cur].title+'" 시간이에요.'; }
+  return (test?'(시험 알림) ':'')+'기록할 시간이에요!'+where+' 사진이나 영상, 한 줄 글을 남겨 볼까요?';
+}
+function fireRemind(test){
+  const txt=remindText(test);
+  $('#toastText').textContent=txt; $('#toast').hidden=false;
+  clearTimeout(RM.hideT); RM.hideT=setTimeout(()=>{$('#toast').hidden=true;},120000);
+  beep(); try{ if(navigator.vibrate) navigator.vibrate([200,120,200]); }catch(e){}
+  try{ if('Notification' in window&&Notification.permission==='granted'&&document.hidden){ const n=new Notification('경주 수학여행 기록 시간',{body:txt,tag:'kj-remind'}); n.onclick=()=>{window.focus();n.close();}; } }catch(e){}
+}
+function checkRemind(){
+  const k=slotKey(); if(!k||k===RM.last) return;
+  RM.last=k; store.set('kj_rm_last',k); fireRemind(false);
+}
+function remindReset(){
+  RM.last=slotKey()||''; store.set('kj_rm_last',RM.last); renderRemindNote();
+}
+function renderRemindNote(){
+  const iv=remindMin();
+  const info=iv?'기록 알림: '+(iv===60?'1시간':iv===120?'2시간':'30분')+'마다 (여행 날 오전 8시~밤 9시)':'기록 알림: 꺼져 있어요';
+  const ri=$('#remindInfo'); if(ri) ri.textContent=info+' · 위쪽 "화면 설정"에서 바꿔요.';
+  let p;
+  if(!('Notification' in window)) p='이 기기에서는 알림창을 쓸 수 없어요. 화면 안 알림과 소리로 알려 줘요.';
+  else if(Notification.permission==='granted') p='알림창이 허용되어 있어요.';
+  else if(Notification.permission==='denied') p='알림창이 막혀 있어요. 브라우저 설정에서 허용해야 해요.';
+  else p='알림창을 허용하면 다른 화면을 보고 있을 때도 알려 줘요.';
+  const n=$('#rmNote'); if(n) n.textContent=p+' 알림은 이 앱이 열려 있을 때만 울려요. 화면이 꺼지거나 앱을 닫으면 울리지 않을 수 있어서, 달력 알림도 함께 쓰면 좋아요.';
+}
+function makeIcs(){
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const ev=(uid,start)=>['BEGIN:VEVENT','UID:'+uid+'@gyeongju-trip','DTSTAMP:'+stamp,'DTSTART:'+start,'DURATION:PT10M','RRULE:FREQ=HOURLY;COUNT=14','SUMMARY:수학여행 기록 시간','DESCRIPTION:사진이나 영상\\, 한 줄 글을 남겨 봐요.','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:수학여행 기록 시간','TRIGGER:PT0S','END:VALARM','END:VEVENT'];
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//gyeongju-trip//KO','CALSCALE:GREGORIAN',...ev('d1','20261104T230000Z'),...ev('d2','20261105T230000Z'),'END:VCALENDAR'].join('\r\n');
+}
+function downloadIcs(){
+  try{
+    const b=new Blob([makeIcs()],{type:'text/calendar'}); const u=URL.createObjectURL(b);
+    const a=document.createElement('a'); a.href=u; a.download='수학여행_기록알림.ics'; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000);
+    $('#rmNote').textContent='달력 파일을 받았어요. 파일을 열어 휴대전화 달력에 추가해요. 파일이 받아지지 않으면 이 화면에서는 쓸 수 없는 거예요.';
+  }catch(e){ $('#rmNote').textContent='이 화면에서는 달력 파일을 받을 수 없어요.'; }
+}
+document.addEventListener('pointerdown',()=>{audioCtx();},{once:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRemind();});
+window.addEventListener('focus',checkRemind);
+
+/* ---------- 탭 ---------- */
+function showTab(t){
+  state.tab=t;
+  $$('.tab').forEach(s=>s.classList.toggle('on',s.id==='tab-'+t));
+  $$('.tabbar button').forEach(b=>{if(b.dataset.tab===t)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  $('#hero').classList.toggle('compact',t!=='schedule');
+  $('#heroTitle').textContent=t==='schedule'?'경주 수학여행 길잡이':'경주 수학여행';
+  window.scrollTo(0,0);
+}
+
+/* ---------- 이벤트 ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a'); if(!t) return;
+  if(t.id==='rmTest'){fireRemind(true);return;}
+  if(t.id==='rmPerm'){try{Notification.requestPermission().then(renderRemindNote);}catch(e){renderRemindNote();}return;}
+  if(t.id==='rmIcs'){downloadIcs();return;}
+  if(t.id==='toastLater'){$('#toast').hidden=true;return;}
+  if(t.id==='toastGo'){$('#toast').hidden=true;showTab('journal');fillPlaceSelect(defaultPlace());setTimeout(()=>{$('#jText').focus();},50);return;}
+  if(t.id==='setBtn'){const p=$('#settings');p.hidden=!p.hidden;t.setAttribute('aria-expanded',String(!p.hidden));return;}
+  if(t.dataset.pref){const [k,v]=t.dataset.pref.split(':');PREF[k]=k==='fs'?+v:v;store.set('kj_'+k,String(PREF[k]));applyPref();if(k==='remind')remindReset();return;}
+  if(t.dataset.tab){showTab(t.dataset.tab);return;}
+  if(t.dataset.mode){state.mode=t.dataset.mode;store.set('kj_mode',state.mode);renderSchedule();renderHero();return;}
+  if(t.dataset.day!==undefined&&t.closest('#daySeg')){state.day=+t.dataset.day;renderSchedule();return;}
+  if(t.dataset.place){openPlace(t.dataset.place);return;}
+  if(t.dataset.rec){showTab('journal');fillPlaceSelect(t.dataset.rec);setTimeout(()=>{$('#jText').focus();$('#composer').scrollIntoView({behavior:'smooth',block:'start'});},30);return;}
+  if(t.dataset.rm!==undefined){J.photos.splice(+t.dataset.rm,1);renderThumbs();return;}
+  if(t.dataset.rmv!==undefined){J.videos.splice(+t.dataset.rmv,1);renderThumbs();return;}
+  if(t.dataset.edit){startEdit(t.dataset.edit);return;}
+  if(t.dataset.del){askDelete(t);return;}
+});
+$('#jPlace').addEventListener('change',updateHint);
+const MAX_VID=100*1048576, MAX_VIDS=3, MAX_PH=6;
+async function addFiles(files){
+  if(!files.length) return;
+  jmsg('불러오는 중…',true); let msg='';
+  for(const f of files){
+    const isV=(f.type||'').startsWith('video/')||/\.(mp4|mov|m4v|webm|3gp)$/i.test(f.name||'');
+    if(isV){
+      if(J.videos.length>=MAX_VIDS){msg='영상은 한 기록에 3개까지 넣을 수 있어요.';continue;}
+      if(f.size>MAX_VID){msg='영상 하나는 100MB까지 넣을 수 있어요. 더 짧게 찍어 주세요.';continue;}
+      J.videos.push(new Blob([f],{type:f.type||'video/mp4'}));
+    }else{
+      if(J.photos.length>=MAX_PH){msg='사진은 한 기록에 6장까지 넣을 수 있어요.';continue;}
+      try{J.photos.push(await shrink(f));}catch(err){msg='이 사진은 불러오지 못했어요.';}
+    }
+  }
+  renderThumbs(); saveDraft(); jmsg(msg,!msg);
+}
+['fShoot','fRec','fPick'].forEach(id=>$('#'+id).addEventListener('change',ev=>{const fs=Array.from(ev.target.files||[]);ev.target.value='';store.del('kj_cam');addFiles(fs);}));
+const nativePick=id=>{store.set('kj_cam',String(Date.now()));saveDraft();$('#'+id).click();};
+$('#jShoot').addEventListener('click',()=>openCam('photo'));
+$('#jRec').addEventListener('click',()=>openCam('video'));
+$('#jPick').addEventListener('click',()=>nativePick('fPick'));
+$('#jText').addEventListener('input',()=>saveDraftSoon());
+$('#jPlace').addEventListener('change',()=>saveDraftSoon());
+$('#jSave').addEventListener('click',saveEntry);
+$('#jCancel').addEventListener('click',()=>{resetComposer('free');jmsg('',true);});
+$('#jPrint').addEventListener('click',()=>{showTab('journal');setTimeout(()=>{try{window.print();}catch(e){jmsg('이 화면에서는 인쇄를 열 수 없어요. 브라우저 메뉴의 인쇄를 이용해요.',false);}},50);});
+
+/* ---------- 시작 ---------- */
+(async function init(){
+  store.del('kj_code');
+  applyPref(); renderRemindNote();
+  try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+  renderSchedule(); renderPlaces(); renderHero();
+  await DB.init(); fillPlaceSelect(defaultPlace()); await refreshEntries(); checkRemind(); await restoreDraft();
+  setInterval(()=>{checkRemind();renderHero(); if(state.tab==='schedule') renderSchedule();},60000);
+})();
+})();
+</script>
+</body>
+</html>
